@@ -1,0 +1,144 @@
+/*
+              ┌───────────────────────────────┐
+              │   赛博佛祖保佑，无Bug无卡顿   │
+              └───────────────────────────────┘
+
+          ┏━━━┓        ┏━━━┓        ┏━━━┓
+          ┃ ⌬ ┃        ┃ ⌬ ┃        ┃ ⌬ ┃
+          ┃   ┃        ┃   ┃        ┃   ┃
+          ┗━━━┛        ┗━━━┛        ┗━━━┛
+
+       在电光与数据的海洋中，佛祖指引方向。
+       于二进制的轮回里，求索无尽智慧。
+       代码即真理，调试即修行。
+       CPU风扇微鸣，犹如禅音回荡；
+       键盘敲击回响，化作清净梵唱。
+
+       佛曰：
+       "写代码如修禅，需专注、需耐心、需敬畏；
+        每一行代码，皆为因果；
+        每一次编译，皆为轮回。"
+
+       于无Bug之代码，建永恒之程序。
+*/
+#include <cstdlib>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+typedef string Elem;
+class SLinkedList;  // forward declaration of SLinkedList
+
+class SNode {  // singly linked list node
+ private:
+  Elem elem;                 // linked list element value
+  SNode* next;               // next item in the list
+  friend class SLinkedList;  // provide SLinkedList access
+};
+
+class SLinkedList {  // a singly linked list
+ public:
+  SLinkedList() : head(NULL) {}
+  ~SLinkedList() {
+    while (!Empty()) RemoveFront();
+  }
+  bool Empty() const { return head == NULL; }
+  const Elem& Front() const { return head->elem; }
+  void AddFront(const Elem& e);
+  void RemoveFront();
+
+  // ToDo: provide implementations for these functions
+  
+  // // print list in order with "->" for next pointers (iterative)
+  // void Print();
+  
+  // SNode* GetHead() { return head; } // helper access function
+  
+  // // print list in order with "->" for next pointers (recursive)
+  void Print(SNode* cur){
+    if(cur == NULL) return;
+    cout << cur->elem << " -> ";
+    Print(cur->next);
+  };
+  
+  // // copy list elements to a vector in order (iterative)
+  vector<Elem> GetElements(){
+    vector<Elem> vec;
+    SNode* cur = head;
+    while(cur != NULL){
+      vec.push_back(cur->elem);
+      cur = cur->next;
+    }
+    return vec;
+  };
+
+  // // copy list elements to a vector in order (recursive)
+  void GetElements(SNode* cur, vector<Elem>& vec){
+    if(cur == NULL) return;
+    vec.push_back(cur->elem);
+    GetElements(cur->next, vec);
+  };
+
+  // // get element at index i where index 0 refers to head (iterative)
+  Elem GetElement(int i){
+//     SNode* cur = head;
+//     for(int j = 0; j < i; j++){
+//       cur = cur->next;
+//     }
+//     return cur->elem;
+//   };
+    SNode* cur = head;
+    while(i > 0 && cur != NULL){
+        cur = cur -> next;
+        i--; //i 虽然减少了但是循环的次数正好增加到index位
+    }
+    return cur->elem;
+  };
+  // // get element at index i where index 0 refers to head (recursive)
+  Elem GetElement(SNode* cur, int i){ // SNode* cur 就可以放head了
+    if(i == 0) return cur->elem;
+    return GetElement(cur->next, i-1);
+  };
+
+  // // check if list has an element. Return true or false (iterative)
+  // bool HasElement(const Elem& e);
+
+  // // check if list has an element. Return true or false (recursive)
+  // bool HasElement(SNode* cur, const Elem& e);
+
+  // // reverse list (iterative)
+  // void Reverse();
+
+  // // reverse list (recursive)
+  // void Reverse(SNode* cur, SNode* prev = NULL);
+
+ private:
+  SNode* head;  // head of the list
+};
+
+void SLinkedList::AddFront(const Elem& e) {  // add to front of list
+  SNode* v = new SNode;                      // create new node
+  v->elem = e;                               // store data
+  v->next = head;                            // head now follows v
+  head = v;                                  // v is now the head
+}
+
+void SLinkedList::RemoveFront() {  // remove front item
+  if (head == NULL) return;        // list is empty
+  SNode* old = head;               // save current head
+  head = old->next;                // skip over old head
+  delete old;                      // delete the old head
+}
+
+int main() {
+  SLinkedList l;
+  l.AddFront("d");
+  l.AddFront("c");
+  l.AddFront("b");
+  l.AddFront("a");
+  
+  cout << l.Front();
+  cout << endl;
+
+
+}
